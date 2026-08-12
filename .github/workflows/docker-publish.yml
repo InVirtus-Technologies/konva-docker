@@ -57,7 +57,7 @@ jobs:
       # ── Extract metadata — tags & labels for BOTH registries ──────────────
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           # List both images: the action generates tags for each
           images: |
