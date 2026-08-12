@@ -6,6 +6,7 @@ const { createCanvas, loadImage } = require('canvas');
 // Expose createCanvas globally so Konva's internal env check finds it
 global.createCanvas = createCanvas;
 
+require('konva/canvas-backend');
 const Konva = require('konva').default;
 
 /**
