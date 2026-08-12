@@ -6,7 +6,7 @@ const { createCanvas, loadImage } = require('canvas');
 // Expose createCanvas globally so Konva's internal env check finds it
 global.createCanvas = createCanvas;
 
-const Konva = require('konva/cmj').default;
+const Konva = require('konva').default;
 
 /**
  * Supported output formats and their MIME types

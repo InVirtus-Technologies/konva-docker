@@ -48,8 +48,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          # load: true exports the image to the local Docker daemon so `docker run` works.
-          # It requires a single platform (multi-arch is handled in docker-publish.yml).
           load: true
           platforms: linux/amd64
           push: false
