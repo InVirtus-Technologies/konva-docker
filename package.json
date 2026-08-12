@@ -27,7 +27,7 @@
     "url": "https://github.com/YOUR_USERNAME/konva-renderer/issues"
   },
   "dependencies": {
-    "canvas": "^2.11.2",
+    "canvas": "^3.2.3",
     "express": "^4.19.2",
     "konva": "^10.3.0",
     "pino": "^9.3.2",
