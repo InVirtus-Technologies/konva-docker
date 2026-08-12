@@ -4,7 +4,6 @@
 > Send a Konva stage JSON → get back a PNG / JPEG / WebP image.
 
 [![CI](https://github.com/YOUR_USERNAME/invirtus/konva/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/invirtus/konva/actions/workflows/ci.yml)
-[![Docker Image](https://ghcr.io/YOUR_USERNAME/invirtus/konva)](https://ghcr.io/YOUR_USERNAME/invirtus/konva)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
