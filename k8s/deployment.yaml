@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: konva-renderer
+  name: invirtus/konva
   labels:
-    app: konva-renderer
+    app: invirtus/konva
     version: "1.0.0"
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: konva-renderer
+      app: invirtus/konva
   template:
     metadata:
       labels:
-        app: konva-renderer
+        app: invirtus/konva
     spec:
       # ----------------------------------------------------------------
       # Security: rootless pod
@@ -30,10 +30,10 @@ spec:
       automountServiceAccountToken: false
 
       containers:
-        - name: konva-renderer
+        - name: invirtus/konva
           # Replace with your registry, e.g.:
-          # image: registry.example.com/konva-renderer:1.0.0
-          image: konva-renderer:latest
+          # image: registry.example.com/invirtus/konva:1.0.0
+          image: invirtus/konva:latest
           imagePullPolicy: IfNotPresent
 
           ports:
@@ -111,4 +111,4 @@ spec:
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
             matchLabels:
-              app: konva-renderer
+              app: invirtus/konva

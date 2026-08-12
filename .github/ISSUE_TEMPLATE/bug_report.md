@@ -26,7 +26,7 @@ A clear and concise description of the bug.
 
 ## Environment
 
-- konva-renderer version / image tag:
+- invirtus/konva version / image tag:
 - Node.js version (if running locally):
 - OS / Kubernetes version:
 

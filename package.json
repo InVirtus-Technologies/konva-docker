@@ -16,15 +16,15 @@
     "kubernetes",
     "image-rendering"
   ],
-  "author": "Alexandre",
+  "author": "inVirtus Technologies",
   "license": "MIT",
-  "homepage": "https://github.com/YOUR_USERNAME/konva-renderer#readme",
+  "homepage": "https://github.com/InVirtus-Technologies/konva-docker#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/konva-renderer.git"
+    "url": "https://github.com/InVirtus-Technologies/konva-docker.git"
   },
   "bugs": {
-    "url": "https://github.com/YOUR_USERNAME/konva-renderer/issues"
+    "url": "https://github.com/InVirtus-Technologies/konva-docker/issues"
   },
   "dependencies": {
     "canvas": "^3.2.3",

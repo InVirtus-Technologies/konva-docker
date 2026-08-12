@@ -3,8 +3,8 @@
 > **Konva.js server-side rendering as a microservice.**  
 > Send a Konva stage JSON → get back a PNG / JPEG / WebP image.
 
-[![CI](https://github.com/YOUR_USERNAME/konva-renderer/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/konva-renderer/actions/workflows/ci.yml)
-[![Docker Image](https://ghcr.io/YOUR_USERNAME/konva-renderer)](https://ghcr.io/YOUR_USERNAME/konva-renderer)
+[![CI](https://github.com/YOUR_USERNAME/invirtus/konva/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/invirtus/konva/actions/workflows/ci.yml)
+[![Docker Image](https://ghcr.io/YOUR_USERNAME/invirtus/konva)](https://ghcr.io/YOUR_USERNAME/invirtus/konva)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -25,7 +25,7 @@
 ```bash
 docker run --rm -p 3000:3000 \
   --read-only --tmpfs /tmp --user 1000:1000 \
-  ghcr.io/YOUR_USERNAME/konva-renderer:latest
+  invirtus/konva:latest
 
 curl -X POST http://localhost:3000/render \
   -H 'Content-Type: application/json' \
@@ -97,53 +97,17 @@ document.querySelector('img').src = URL.createObjectURL(blob);
 ## Build
 
 ```bash
-docker build -t konva-renderer:latest .
+docker build -t invirtus/konva:latest .
 
 # Run rootless (mirrors production)
 docker run --rm -p 3000:3000 \
   --read-only --tmpfs /tmp --user 1000:1000 \
-  konva-renderer:latest
+  invirtus/konva:latest
 ```
 
 > The Dockerfile uses a **multi-stage build**: native canvas libraries are compiled in the `deps` stage, only the runtime `.so` files are copied to the final image.
 
 ---
-
-## Deploy on Kubernetes
-
-```bash
-# 1. Push your image
-docker tag konva-renderer:latest registry.example.com/konva-renderer:1.0.0
-docker push registry.example.com/konva-renderer:1.0.0
-
-# 2. Edit k8s/deployment.yaml — update the `image:` field
-
-# 3. Apply all manifests
-kubectl apply -f k8s/
-
-# 4. Port-forward to test
-kubectl port-forward svc/konva-renderer 8080:80
-
-curl -X POST http://localhost:8080/render \
-  -H 'Content-Type: application/json' \
-  -d @example-payload.json \
-  --output result.png
-```
-
-### Security context (enforced in deployment.yaml)
-
-```yaml
-securityContext:
-  runAsNonRoot: true
-  runAsUser: 1000
-  readOnlyRootFilesystem: true
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop: [ALL]
-```
-
----
-
 ## Environment variables
 
 | Variable     | Default      | Description                    |
@@ -163,17 +127,6 @@ securityContext:
 | `ci.yml`            | Push / PR on `main`             | Lint, `npm audit`, Docker build + smoke test |
 | `docker-publish.yml`| Push tag `v*.*.*`               | Multi-arch build, push to GHCR, cosign sign  |
 | `release.yml`       | Push tag `v*.*.*`               | Auto-generate GitHub Release with changelog  |
-
-### Releasing
-
-```bash
-git tag v1.2.3
-git push origin v1.2.3
-```
-
-This triggers the publish and release workflows automatically.
-
----
 
 ## Automatic dependency updates
 

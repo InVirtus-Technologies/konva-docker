@@ -15,7 +15,7 @@ on:
 env:
   # Docker Hub image name — format: <dockerhub-username>/<repo-name>
   # Update DOCKERHUB_USERNAME in your repo secrets, then set the name here:
-  DOCKERHUB_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/konva-renderer
+  DOCKERHUB_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/invirtus/konva
   # GHCR image (uses the GitHub repo name automatically)
   GHCR_IMAGE: ghcr.io/${{ github.repository }}
 
@@ -71,7 +71,7 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha,prefix=sha-,format=short
           labels: |
-            org.opencontainers.image.title=konva-renderer
+            org.opencontainers.image.title=invirtus/konva
             org.opencontainers.image.description=Konva.js server-side rendering microservice
             org.opencontainers.image.licenses=MIT
 

@@ -53,7 +53,7 @@ jobs:
           load: true
           platforms: linux/amd64
           push: false
-          tags: konva-renderer:ci
+          tags: invirtus/konva:ci
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -64,7 +64,7 @@ jobs:
             --tmpfs /tmp \
             --user 1000:1000 \
             -p 3000:3000 \
-            konva-renderer:ci
+            invirtus/konva:ci
 
           # Wait for the server to be ready
           for i in $(seq 1 15); do

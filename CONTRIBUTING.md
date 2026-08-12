@@ -1,4 +1,4 @@
-# Contributing to konva-renderer
+# Contributing to invirtus/konva
 
 Thank you for your interest! Here's everything you need to contribute.
 
@@ -7,8 +7,8 @@ Thank you for your interest! Here's everything you need to contribute.
 **Prerequisites**: Docker (for the full build). For local dev without Docker, you need `libcairo2-dev`, `libpango1.0-dev`, `libjpeg-dev`, `libgif-dev`, `librsvg2-dev` (Debian/Ubuntu).
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/konva-renderer.git
-cd konva-renderer
+git clone https://github.com/YOUR_USERNAME/invirtus/konva.git
+cd invirtus/konva
 npm install
 npm start
 ```
@@ -34,7 +34,7 @@ Example: `feat(renderer): add support for custom fonts`
 
 1. Fork and create a branch: `git checkout -b feat/my-feature`
 2. Make your changes
-3. Test: `docker build -t konva-renderer:dev . && docker run --rm -p 3000:3000 --read-only --tmpfs /tmp --user 1000:1000 konva-renderer:dev`
+3. Test: `docker build -t invirtus/konva:dev . && docker run --rm -p 3000:3000 --read-only --tmpfs /tmp --user 1000:1000 invirtus/konva:dev`
 4. Open a PR against `main`
 
 ## Releasing (maintainers only)
