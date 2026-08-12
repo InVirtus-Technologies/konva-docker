@@ -12,3 +12,4 @@ coverage/
 result.*
 output.*
 .DS_Store
+.idea
