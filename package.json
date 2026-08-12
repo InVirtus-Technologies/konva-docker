@@ -29,7 +29,7 @@
   "dependencies": {
     "canvas": "^2.11.2",
     "express": "^4.19.2",
-    "konva": "^9.3.6",
+    "konva": "^10.3.0",
     "pino": "^9.3.2",
     "pino-http": "^10.2.0"
   },
