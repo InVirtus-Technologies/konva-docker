@@ -76,13 +76,3 @@ jobs:
           cache-to: type=gha,mode=max
           provenance: true
           sbom: true
-
-      # ── Update Docker Hub repository description ───────────────────────────
-      - name: Update Docker Hub description
-        uses: peter-evans/dockerhub-description@v4
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: ${{ env.DOCKERHUB_IMAGE }}
-          readme-filepath: ./README.md
-          short-description: "Konva.js server-side rendering microservice — JSON → PNG/JPEG/WebP"
