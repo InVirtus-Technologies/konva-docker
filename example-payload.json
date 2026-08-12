@@ -1,0 +1,54 @@
+{
+  "stage": {
+    "className": "Stage",
+    "attrs": {
+      "width": 400,
+      "height": 300
+    },
+    "children": [
+      {
+        "className": "Layer",
+        "attrs": {},
+        "children": [
+          {
+            "className": "Rect",
+            "attrs": {
+              "x": 0,
+              "y": 0,
+              "width": 400,
+              "height": 300,
+              "fill": "#1a1a2e"
+            }
+          },
+          {
+            "className": "Circle",
+            "attrs": {
+              "x": 200,
+              "y": 150,
+              "radius": 80,
+              "fill": "#e94560",
+              "shadowColor": "#e94560",
+              "shadowBlur": 30,
+              "shadowOpacity": 0.8
+            }
+          },
+          {
+            "className": "Text",
+            "attrs": {
+              "x": 100,
+              "y": 260,
+              "text": "Konva Renderer",
+              "fontSize": 22,
+              "fontFamily": "sans-serif",
+              "fill": "#ffffff",
+              "align": "center",
+              "width": 200
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "format": "png",
+  "pixelRatio": 2
+}

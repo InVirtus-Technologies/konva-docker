@@ -1,0 +1,39 @@
+{
+  "name": "konva-renderer",
+  "version": "1.0.0",
+  "description": "Konva.js server-side rendering microservice — render Konva stage JSON to PNG/JPEG/WebP via HTTP",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "keywords": [
+    "konva",
+    "canvas",
+    "server-side-rendering",
+    "microservice",
+    "docker",
+    "kubernetes",
+    "image-rendering"
+  ],
+  "author": "Alexandre",
+  "license": "MIT",
+  "homepage": "https://github.com/YOUR_USERNAME/konva-renderer#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/konva-renderer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YOUR_USERNAME/konva-renderer/issues"
+  },
+  "dependencies": {
+    "canvas": "^2.11.2",
+    "express": "^4.19.2",
+    "konva": "^9.3.6",
+    "pino": "^9.3.2",
+    "pino-http": "^10.2.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
