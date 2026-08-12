@@ -64,7 +64,7 @@ jobs:
       # ── Build & Push (multi-arch: amd64 + arm64) ─────────────────────────
       - name: Build and push Docker image
         id: build
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           platforms: linux/amd64,linux/arm64
