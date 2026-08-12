@@ -3,7 +3,7 @@
 # ---------------------------------------------------------------------------
 # Stage 1 – deps: install only production dependencies
 # ---------------------------------------------------------------------------
-FROM node:20-bookworm-slim AS deps
+FROM node:26-bookworm-slim AS deps
 
 # canvas native module requires these build tools at install time
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -27,7 +27,7 @@ RUN npm ci --omit=dev
 # ---------------------------------------------------------------------------
 # Stage 2 – runtime: minimal image, rootless
 # ---------------------------------------------------------------------------
-FROM node:20-bookworm-slim AS runtime
+FROM node:26-bookworm-slim AS runtime
 
 # Runtime libraries needed by node-canvas (no build tools)
 RUN apt-get update && apt-get install -y --no-install-recommends \
