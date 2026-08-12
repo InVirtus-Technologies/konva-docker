@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
@@ -44,10 +44,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build image (no push)
-        uses: docker/build-push-action@v7
+      - name: Build image (load into local daemon for smoke test)
+        uses: docker/build-push-action@v6
         with:
           context: .
+          # load: true exports the image to the local Docker daemon so `docker run` works.
+          # It requires a single platform (multi-arch is handled in docker-publish.yml).
+          load: true
+          platforms: linux/amd64
           push: false
           tags: konva-renderer:ci
           cache-from: type=gha
