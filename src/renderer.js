@@ -2,6 +2,9 @@
 
 // Must be required BEFORE konva so it registers the canvas backend
 const { createCanvas, loadImage } = require('canvas');
+const { fontsRegister } = require('./fontsRegister');
+
+fontsRegister();
 
 // Expose createCanvas globally so Konva's internal env check finds it
 global.createCanvas = createCanvas;
@@ -45,7 +48,6 @@ async function render(stageDescriptor, options = {}) {
     quality = 0.92,
     pixelRatio = 1,
   } = options;
-
   // --- Validate format ---
   if (!FORMAT_MIME[format]) {
     const err = new Error(`Unsupported format "${format}". Supported: ${Object.keys(FORMAT_MIME).join(', ')}`);
