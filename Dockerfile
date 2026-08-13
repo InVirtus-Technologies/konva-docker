@@ -44,6 +44,7 @@ WORKDIR /app
 
 COPY --from=deps --chown=node:node /build/node_modules ./node_modules
 COPY --chown=node:node src/ ./src/
+COPY --chown=node:node fonts/ ./fonts/
 COPY --chown=node:node package.json ./
 
 # Drop to non-root user
