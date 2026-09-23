@@ -149,6 +149,41 @@ Everything Konva supports in SSR mode via `node-canvas`:
 
 > **Note on remote images**: `Konva.Image` shapes with remote URLs are not automatically fetched. Pre-encode your images as base64 or extend `renderer.js` to resolve URLs before building the stage.
 
+### Barcodes & 2D codes
+
+An `Image` node can be flagged as a barcode or 2D code instead of carrying real image data, by setting `eslCodeKind` plus the matching value/format attrs (this mirrors the ESL template editor's Konva node shape):
+
+```json
+{
+  "className": "Image",
+  "attrs": {
+    "x": 40, "y": 40, "width": 160, "height": 60,
+    "eslCodeKind": "barcode",
+    "eslCodeValue": "eeee",
+    "eslBarcodeFormat": "CODE128"
+  }
+}
+```
+
+```json
+{
+  "className": "Image",
+  "attrs": {
+    "x": 83, "y": 12, "width": 80, "height": 80,
+    "eslCodeKind": "2dcode",
+    "eslCodeValue": "fff",
+    "eslCodeType": "DATAMATRIX"
+  }
+}
+```
+
+The renderer generates the symbol server-side (via [`bwip-js`](https://github.com/metafloor/bwip-js)) and stretches it into the node's `width`/`height` box, same as any other image. Supported values (`src/codeGenerator.js`):
+
+| `eslCodeKind` | attr             | supported values                                    |
+| ------------- | ----------------- | ---------------------------------------------------- |
+| `barcode`     | `eslBarcodeFormat` | `CODE128`, `EAN13`, `EAN8`, `UPC`, `CODE39`, `ITF14` |
+| `2dcode`      | `eslCodeType`      | `QRCODE`, `DATAMATRIX`                               |
+
 ---
 
 ## Contributing

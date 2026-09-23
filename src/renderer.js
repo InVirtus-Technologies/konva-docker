@@ -3,6 +3,7 @@
 // Must be required BEFORE konva so it registers the canvas backend
 const { createCanvas, loadImage } = require('canvas');
 const { fontsRegister } = require('./fontsRegister');
+const { generateCodeBuffer } = require('./codeGenerator');
 
 fontsRegister();
 
@@ -81,6 +82,22 @@ async function render(stageDescriptor, options = {}) {
   // --- Build stage (Konva SSR mode) ---
   // In SSR mode Konva creates offscreen canvases via global.createCanvas
   const stage = buildStage(descriptor);
+
+  // --- Render barcode / 2D-code nodes ---
+  // These arrive as plain Image nodes carrying eslCodeKind/eslCodeValue/
+  // eslBarcodeFormat/eslCodeType metadata instead of an actual image (Konva
+  // can't serialize image data). Generate the real bitmap here and attach it,
+  // then force a synchronous redraw of the affected layers.
+  const codeNodes = stage.find((node) => node.getAttr && node.getAttr('eslCodeKind'));
+  if (codeNodes.length) {
+    await Promise.all(codeNodes.map(async (node) => {
+      const buffer = await generateCodeBuffer(node.attrs);
+      if (buffer) {
+        node.image(await loadImage(buffer));
+      }
+    }));
+    stage.getLayers().forEach((layer) => layer.draw());
+  }
 
   // --- Composite all layers onto one canvas ---
   const outputCanvas = createCanvas(canvasW, canvasH);
