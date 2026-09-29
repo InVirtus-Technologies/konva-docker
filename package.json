@@ -29,8 +29,8 @@
   "dependencies": {
     "bwip-js": "^4.11.4",
     "canvas": "^3.2.3",
+    "konva": "^10.3.2",
     "express": "^5.2.1",
-    "konva": "^10.3.1",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
     "pino-pretty": "^13.1.3"
