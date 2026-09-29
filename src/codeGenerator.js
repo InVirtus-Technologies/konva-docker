@@ -16,7 +16,7 @@ const BARCODE_FORMAT_TO_BCID = {
 };
 
 /**
- * Maps the ESL editor's `eslCodeType` values (see
+ * Maps the ESL editor's `codeType` values (see
  * cloud.invirtus.io src/Enum/TwoDCodeType.php) to bwip-js symbology ids.
  */
 const CODE_2D_TYPE_TO_BCID = {
@@ -38,10 +38,10 @@ const CODE_KIND_2D = '2dcode';
  * whatever size the user picked.
  */
 async function generateCodeBuffer(attrs = {}) {
-  const { eslCodeKind, eslCodeValue } = attrs;
+  const { codeKind, codeValue } = attrs;
 
   let bcid;
-  if (eslCodeKind === CODE_KIND_BARCODE) {
+  if (codeKind === CODE_KIND_BARCODE) {
     bcid = BARCODE_FORMAT_TO_BCID[attrs.eslBarcodeFormat];
     if (!bcid) {
       const err = new Error(
@@ -50,11 +50,11 @@ async function generateCodeBuffer(attrs = {}) {
       err.statusCode = 400;
       throw err;
     }
-  } else if (eslCodeKind === CODE_KIND_2D) {
-    bcid = CODE_2D_TYPE_TO_BCID[attrs.eslCodeType];
+  } else if (codeKind === CODE_KIND_2D) {
+    bcid = CODE_2D_TYPE_TO_BCID[attrs.codeType];
     if (!bcid) {
       const err = new Error(
-        `Unsupported eslCodeType "${attrs.eslCodeType}". Supported: ${Object.keys(CODE_2D_TYPE_TO_BCID).join(', ')}`
+        `Unsupported codeType "${attrs.codeType}". Supported: ${Object.keys(CODE_2D_TYPE_TO_BCID).join(', ')}`
       );
       err.statusCode = 400;
       throw err;
@@ -65,19 +65,19 @@ async function generateCodeBuffer(attrs = {}) {
 
   const options = {
     bcid,
-    text: String(eslCodeValue ?? ''),
-    scale: eslCodeKind === CODE_KIND_BARCODE ? 4 : 8,
+    text: String(codeValue ?? ''),
+    scale: codeKind === CODE_KIND_BARCODE ? 4 : 8,
     includetext: false,
     backgroundcolor: 'FFFFFF',
   };
-  if (eslCodeKind === CODE_KIND_BARCODE) {
+  if (codeKind === CODE_KIND_BARCODE) {
     options.height = 10; // mm — bar height only; final image is stretched to the node's box
   }
 
   try {
     return await bwipjs.toBuffer(options);
   } catch (err) {
-    const wrapped = new Error(`Failed to generate ${eslCodeKind} (${bcid}) for value "${eslCodeValue}": ${err.message}`);
+    const wrapped = new Error(`Failed to generate ${codeKind} (${bcid}) for value "${codeValue}": ${err.message}`);
     wrapped.statusCode = 400;
     throw wrapped;
   }

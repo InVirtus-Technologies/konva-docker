@@ -151,15 +151,15 @@ Everything Konva supports in SSR mode via `node-canvas`:
 
 ### Barcodes & 2D codes
 
-An `Image` node can be flagged as a barcode or 2D code instead of carrying real image data, by setting `eslCodeKind` plus the matching value/format attrs (this mirrors the ESL template editor's Konva node shape):
+An `Image` node can be flagged as a barcode or 2D code instead of carrying real image data, by setting `codeKind` plus the matching value/format attrs (this mirrors the ESL template editor's Konva node shape):
 
 ```json
 {
   "className": "Image",
   "attrs": {
     "x": 40, "y": 40, "width": 160, "height": 60,
-    "eslCodeKind": "barcode",
-    "eslCodeValue": "eeee",
+    "codeKind": "barcode",
+    "codeValue": "eeee",
     "eslBarcodeFormat": "CODE128"
   }
 }
@@ -170,19 +170,19 @@ An `Image` node can be flagged as a barcode or 2D code instead of carrying real 
   "className": "Image",
   "attrs": {
     "x": 83, "y": 12, "width": 80, "height": 80,
-    "eslCodeKind": "2dcode",
-    "eslCodeValue": "fff",
-    "eslCodeType": "DATAMATRIX"
+    "codeKind": "2dcode",
+    "codeValue": "fff",
+    "codeType": "DATAMATRIX"
   }
 }
 ```
 
 The renderer generates the symbol server-side (via [`bwip-js`](https://github.com/metafloor/bwip-js)) and stretches it into the node's `width`/`height` box, same as any other image. Supported values (`src/codeGenerator.js`):
 
-| `eslCodeKind` | attr             | supported values                                    |
+| `codeKind` | attr             | supported values                                    |
 | ------------- | ----------------- | ---------------------------------------------------- |
 | `barcode`     | `eslBarcodeFormat` | `CODE128`, `EAN13`, `EAN8`, `UPC`, `CODE39`, `ITF14` |
-| `2dcode`      | `eslCodeType`      | `QRCODE`, `DATAMATRIX`                               |
+| `2dcode`      | `codeType`      | `QRCODE`, `DATAMATRIX`                               |
 
 ---
 
