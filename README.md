@@ -113,7 +113,7 @@ docker run --rm -p 3000:3000 \
 |--------------|--------------|--------------------------------|
 | `PORT`       | `3000`       | Listening port                 |
 | `HOST`       | `0.0.0.0`   | Listening address              |
-| `LOG_LEVEL`  | `info`       | Pino log level                 |
+| `LOG_LEVEL`  | `info`       | Pino log level: `fatal`, `error`, `warn`, `info`, `debug`, `trace` or `silent` (case-insensitive; invalid values fall back to `info`) |
 | `BODY_LIMIT` | `10mb`       | Max JSON body size             |
 | `NODE_ENV`   | `production` | Node environment               |
 

@@ -9,12 +9,26 @@ const { render } = require('./renderer');
 // ---------------------------------------------------------------------------
 // Logger
 // ---------------------------------------------------------------------------
+const DEFAULT_LOG_LEVEL = 'info';
+const LOG_LEVELS = ['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'];
+
+// Normalize LOG_LEVEL (case/whitespace-insensitive); fall back to default on invalid input
+const requestedLogLevel = (process.env.LOG_LEVEL || '').trim().toLowerCase();
+const logLevelIsValid = LOG_LEVELS.includes(requestedLogLevel);
+
 const logger = pino({
-  level: process.env.LOG_LEVEL || 'info',
+  level: logLevelIsValid ? requestedLogLevel : DEFAULT_LOG_LEVEL,
   ...(process.env.NODE_ENV !== 'production' && {
     transport: { target: 'pino-pretty' },
   }),
 });
+
+if (requestedLogLevel && !logLevelIsValid) {
+  logger.warn(
+    { logLevel: process.env.LOG_LEVEL, allowed: LOG_LEVELS },
+    `invalid LOG_LEVEL, falling back to "${DEFAULT_LOG_LEVEL}"`,
+  );
+}
 
 // ---------------------------------------------------------------------------
 // App
