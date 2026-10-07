@@ -22,6 +22,25 @@ const FORMAT_MIME = {
   webp: 'image/webp',
 };
 
+const IMAGE_DATA_URI_PATTERN = /^data:image\/(png|jpeg);base64,([A-Za-z0-9+/=]+)$/;
+
+/**
+ * Decode an image data URI ("imageSrc" attribute of a user image node) to a Buffer.
+ *
+ * @param {string} dataUri
+ * @returns {Buffer}
+ */
+function decodeImageDataUri(dataUri) {
+  const match = IMAGE_DATA_URI_PATTERN.exec(String(dataUri));
+  if (!match) {
+    const err = new Error('Image "imageSrc" must be a base64 PNG or JPEG data URI');
+    err.statusCode = 400;
+    throw err;
+  }
+
+  return Buffer.from(match[2], 'base64');
+}
+
 /**
  * Rehydrate a Konva Stage from its plain-object descriptor.
  * Konva.Node.create() handles the full tree recursively.
@@ -97,6 +116,24 @@ async function render(stageDescriptor, options = {}) {
       }
     }));
     stage.getLayers().forEach((layer) => layer.draw());
+  }
+
+  // --- Render user image nodes ---
+  // The ESL editor stores user images as a PNG/JPEG data URI in the "imageSrc"
+  // attribute (Konva can't serialize image data). Only data URIs are accepted
+  // so the renderer never fetches remote resources (SSRF).
+  const imageNodes = stage.find((node) => node.getAttr && node.getAttr('imageSrc'));
+  if (imageNodes.length) {
+    await Promise.all(imageNodes.map(async (node) => {
+      node.image(await loadImage(decodeImageDataUri(node.getAttr('imageSrc'))));
+    }));
+    // The editor stores oversampled bitmaps: use the best downscaling filter.
+    stage.getLayers().forEach((layer) => {
+      const context = layer.getNativeCanvasElement().getContext('2d');
+      context.imageSmoothingQuality = 'high';
+      context.patternQuality = 'best';
+      layer.draw();
+    });
   }
 
   // --- Composite all layers onto one canvas ---

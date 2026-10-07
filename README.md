@@ -184,6 +184,22 @@ The renderer generates the symbol server-side (via [`bwip-js`](https://github.co
 | `barcode`     | `eslBarcodeFormat` | `CODE128`, `EAN13`, `EAN8`, `UPC`, `CODE39`, `ITF14` |
 | `2dcode`      | `codeType`      | `QRCODE`, `DATAMATRIX`                               |
 
+### Images
+
+An `Image` node carries its bitmap in the `imageSrc` attr, as a base64 PNG or JPEG data URI:
+
+```json
+{
+  "className": "Image",
+  "attrs": {
+    "x": 10, "y": 10, "width": 120, "height": 60,
+    "imageSrc": "data:image/png;base64,iVBORw0KGgo..."
+  }
+}
+```
+
+Remote URLs are rejected with a `400`: the renderer never fetches external resources.
+
 ---
 
 ## Contributing
