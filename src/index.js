@@ -55,13 +55,14 @@ app.get('/readyz', (_req, res) => res.json({ status: 'ready' }));
 //   "stage": { ... },        // Konva stage descriptor (required)
 //   "format": "png",         // png | jpeg | webp  (optional, default: png)
 //   "quality": 0.92,         // 0–1  (optional, jpeg/webp only)
-//   "pixelRatio": 1          // >0   (optional, default: 1)
+//   "pixelRatio": 1,         // >0   (optional, default: 1)
+//   "backgroundColor": "#ffffff" // hex color (optional, default: transparent)
 // }
 //
 // Response: image/png (or chosen format) binary
 // ---------------------------------------------------------------------------
 app.post('/render', async (req, res) => {
-  const { stage, format, quality, pixelRatio } = req.body || {};
+  const { stage, format, quality, pixelRatio, backgroundColor } = req.body || {};
 
   if (!stage) {
     return res.status(400).json({ error: '"stage" field is required' });
@@ -72,6 +73,7 @@ app.post('/render', async (req, res) => {
       format: format || 'png',
       quality: quality != null ? Number(quality) : undefined,
       pixelRatio: pixelRatio != null ? Number(pixelRatio) : undefined,
+      backgroundColor: backgroundColor || undefined,
     });
 
     res.set({

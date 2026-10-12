@@ -46,6 +46,7 @@ curl -X POST http://localhost:3000/render \
 | `format`     | string  | `png`   | Output format: `png` \| `jpeg` \| `webp`         |
 | `quality`    | number  | `0.92`  | Quality for JPEG/WebP (0–1)                      |
 | `pixelRatio` | number  | `1`     | Resolution multiplier (e.g. `2` = @2x)           |
+| `backgroundColor` | string | —  | Hex color (e.g. `#ffffff`) painted behind the stage; transparent when omitted |
 
 **Response**: binary `image/png` (or chosen format)
 
@@ -177,12 +178,14 @@ An `Image` node can be flagged as a barcode or 2D code instead of carrying real 
 }
 ```
 
-The renderer generates the symbol server-side (via [`bwip-js`](https://github.com/metafloor/bwip-js)) and stretches it into the node's `width`/`height` box, same as any other image. Supported values (`src/codeGenerator.js`):
+The renderer encodes the symbol server-side (via [`bwip-js`](https://github.com/metafloor/bwip-js)) and draws it directly at the pixel size of the node's `width`/`height` box (scale included), snapped to the pixel grid: every module gets the same whole number of pixels and the symbol is centered on its background. The output therefore only contains the code's two pure colors (no blurred edges), which ESL screens need. Supported values (`src/codeGenerator.js`):
 
 | `codeKind` | attr             | supported values                                    |
 | ------------- | ----------------- | ---------------------------------------------------- |
 | `barcode`     | `eslBarcodeFormat` | `CODE128`, `EAN13`, `EAN8`, `UPC`, `CODE39`, `ITF14` |
 | `2dcode`      | `codeType`      | `QRCODE`, `DATAMATRIX`                               |
+| both          | `codeColor`     | `#000000` (default), `#ffffff`, `#ff0000`            |
+| both          | `codeBackgroundColor` | `#ffffff` (default), `#000000`, `#ff0000`      |
 
 ### Images
 
