@@ -3,7 +3,7 @@
 // Must be required BEFORE konva so it registers the canvas backend
 const { createCanvas, loadImage } = require('canvas');
 const { fontsRegister } = require('./fontsRegister');
-const { generateCodeBuffer } = require('./codeGenerator');
+const { encodeCode, drawCode } = require('./codeGenerator');
 
 fontsRegister();
 
@@ -21,6 +21,8 @@ const FORMAT_MIME = {
   jpeg: 'image/jpeg',
   webp: 'image/webp',
 };
+
+const BACKGROUND_COLOR_PATTERN = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
 
 const IMAGE_DATA_URI_PATTERN = /^data:image\/(png|jpeg);base64,([A-Za-z0-9+/=]+)$/;
 
@@ -60,6 +62,8 @@ function buildStage(descriptor) {
  * @param {'png'|'jpeg'|'webp'} [options.format='png']
  * @param {number}        [options.quality=0.92]    - 0–1 for jpeg/webp
  * @param {number}        [options.pixelRatio=1]    - >0
+ * @param {string}        [options.backgroundColor] - hex color painted behind the stage
+ *                                                    (transparent when omitted)
  * @returns {Promise<{buffer: Buffer, mimeType: string}>}
  */
 async function render(stageDescriptor, options = {}) {
@@ -67,10 +71,18 @@ async function render(stageDescriptor, options = {}) {
     format = 'png',
     quality = 0.92,
     pixelRatio = 1,
+    backgroundColor,
   } = options;
   // --- Validate format ---
   if (!FORMAT_MIME[format]) {
     const err = new Error(`Unsupported format "${format}". Supported: ${Object.keys(FORMAT_MIME).join(', ')}`);
+    err.statusCode = 400;
+    throw err;
+  }
+
+  // --- Validate background color ---
+  if (backgroundColor !== undefined && !BACKGROUND_COLOR_PATTERN.test(String(backgroundColor))) {
+    const err = new Error(`Unsupported backgroundColor "${backgroundColor}". Expected a hex color (e.g. "#ffffff")`);
     err.statusCode = 400;
     throw err;
   }
@@ -105,16 +117,28 @@ async function render(stageDescriptor, options = {}) {
   // --- Render barcode / 2D-code nodes ---
   // These arrive as plain Image nodes carrying codeKind/codeValue/
   // eslBarcodeFormat/codeType metadata instead of an actual image (Konva
-  // can't serialize image data). Generate the real bitmap here and attach it,
-  // then force a synchronous redraw of the affected layers.
+  // can't serialize image data). Draw the real code here, at the exact pixel
+  // size the node will occupy and snapped to the pixel grid, so it's drawn 1:1
+  // (no resampling, hence no blurred module edges), then force a synchronous
+  // redraw of the affected layers.
   const codeNodes = stage.find((node) => node.getAttr && node.getAttr('codeKind'));
   if (codeNodes.length) {
-    await Promise.all(codeNodes.map(async (node) => {
-      const buffer = await generateCodeBuffer(node.attrs);
-      if (buffer) {
-        node.image(await loadImage(buffer));
+    codeNodes.forEach((node) => {
+      const code = encodeCode(node.attrs);
+      if (!code) {
+        return;
       }
-    }));
+      const scale = node.getAbsoluteScale();
+      const scaleX = Math.abs(scale.x) || 1;
+      const scaleY = Math.abs(scale.y) || 1;
+      const pixelWidth = Math.max(1, Math.round(node.width() * scaleX));
+      const pixelHeight = Math.max(1, Math.round(node.height() * scaleY));
+
+      node.image(drawCode(code, pixelWidth, pixelHeight));
+      node.size({ width: pixelWidth / scaleX, height: pixelHeight / scaleY });
+      const position = node.absolutePosition();
+      node.absolutePosition({ x: Math.round(position.x), y: Math.round(position.y) });
+    });
     stage.getLayers().forEach((layer) => layer.draw());
   }
 
@@ -139,6 +163,13 @@ async function render(stageDescriptor, options = {}) {
   // --- Composite all layers onto one canvas ---
   const outputCanvas = createCanvas(canvasW, canvasH);
   const ctx = outputCanvas.getContext('2d');
+
+  // Areas the stage doesn't paint are transparent: fill them first when a
+  // background is requested (ESL screens have no transparency).
+  if (backgroundColor) {
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, 0, canvasW, canvasH);
+  }
 
   if (pr !== 1) {
     ctx.scale(pr, pr);
